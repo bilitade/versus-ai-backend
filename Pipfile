@@ -10,6 +10,7 @@ httpx = "*"
 python-dotenv = "*"
 pydantic = "*"
 openai = "*"
+pydantic-ai = "*"
 
 [dev-packages]
 
