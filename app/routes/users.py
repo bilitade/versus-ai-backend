@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 from app.schemas.user import UserCreate, UserResponse
 from app.crud.user_crud import create_user, get_user, get_user_by_username
+from app.core.auth import get_current_user
 
 router = APIRouter(prefix="/v1/users", tags=["users"])
 
@@ -14,7 +15,11 @@ def create_new_user(user: UserCreate, db: Session = Depends(get_db)):
     return create_user(db, user)
 
 @router.get("/{user_id}", response_model=UserResponse)
-def get_user_info(user_id: int, db: Session = Depends(get_db)):
+def get_user_info(
+    user_id: int,
+    current_user: str = Depends(get_current_user),  
+    db: Session = Depends(get_db)
+):
     db_user = get_user(db, user_id)
     if not db_user:
         raise HTTPException(status_code=404, detail="User not found")
